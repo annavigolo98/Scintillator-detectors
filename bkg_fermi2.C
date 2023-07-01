@@ -1,4 +1,4 @@
-//macro per sottrarre il backgound (funzione di Fermi)
+//Subtracts the background using a Fermi function for a given channel of the digitizer (ch0 or ch1)
 
 
 struct slimport_data_t {
@@ -11,16 +11,16 @@ void bkg()
 {
 
 
-//vettori dei dati di input per ch0 e ch1
+//input data ch0 and ch1
 vector<const char*> dati_in0({"ch0_0.root","ch0_1.root","ch0_2.root","ch0_3.root","ch0_4.root","ch0_5.root"});
 vector<const char*>    dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.root","ch1_4.root","ch1_5.root"});
 
 
-// valori in canali dei picchi a 1275+511 keV del La ... grafici su CH1
+// values in channels for the peaks at 1275+511 keV of lantanium detector 
 vector <double> sxch0({2320.,2300.,2300.,2300.,2300.,2300.}); //ch0
 vector <double> dxch0({2450.,2450.,2450.,2400.,2400.,2400.});
 
-vector <double> sxch1({2460.,2460.,2460.,2460.,2460.,2460.});  //ch1 guarda solo la distanza più vicina 0
+vector <double> sxch1({2460.,2460.,2460.,2460.,2460.,2460.});  //ch1
 vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
   
   TCanvas* tc= new TCanvas("tc","histo",2400,800);
@@ -53,14 +53,14 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	//	inbranch_time->GetEntry(i);	
 	}	
 	
-	//itervalli a sx e dx del picco in cui vado a vedere il bkg
+	//itervals  sx and dx of the peak to which subtract the background
 	int sx_min=sxch1[a]-50.; //ch1
 	int sx_max=sxch1[a];
 	
 	int dx_min=dxch1[a]; //ch1
 	int dx_max=dxch1[a]+50;
 	
-	//fit guassiano del picco, tra sx_max e dx_min	
+	//gaussian fit between sx_max and dx_min
 	TF1 *g   = new TF1("g1","gaus",sx_max,dx_min);
 	h_spectrum->Fit(g,"R");
 	
@@ -73,7 +73,7 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	double mean_sx=0;
 
 
-//primo for per la parte a sinistra del picco	
+//part at the left side of the peak
 	for(int i=sx_min; i<sx_max;i++){
 	sx+=h_spectrum->GetBinContent(i);
 	mean_sx= sx/(sx_max-sx_min);
@@ -83,7 +83,7 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	double mean_dx=0;
 
 	
-//primo for per la parte a destra del picco	
+//part at the right side of the peak
 	for(int i=dx_min; i<dx_max;i++){
 	dx+=h_spectrum->GetBinContent(i);
 	mean_dx= dx/(dx_max-dx_min);
@@ -100,9 +100,9 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	double peakcounts = h_spectrum->Integral(sx_max,dx_min);
 	
 	
-	//attività del Co oggi bq
+	//Co activity today bq
 	double activity_co = 93.56*1.e3;
-	//attività del Na oggi bq 
+	//activity Na today bq 
 	double activity_na = 23447.;
 	
 	int n=intree->GetEntries();
@@ -116,19 +116,13 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	cout<<"Peak counts  "<<peakcounts << "  +/-  " << sqrt(peakcounts) << endl;
 	cout<<"Background counts  "<<bkg << "  +/-  " << sqrt(bkg) << endl;   
 
-	//Alternativa per calcolare i conteggi di background
-	//cout <<"Background counts  " << retta->Integral(sx_max,dx_min) << endl;	
+		
 
 
 
 	cout<<"Net counts  " << (peakcounts-bkg) <<"  +/-  " << sqrt(peakcounts+bkg)<<endl;
+	//efficiency 1275 and 511 keV  branching ratio: 0.904
 	
-	//efficienza per il cobalto
-	//cout<<"Efficiency  " << (peakcounts-bkg)/(activity*aqtime) <<endl;
-	
-	//efficienza per il sodio 511: no branching ratio
-	//efficienza 1275 br di 0.904
-	//efficienza picco somma 511+1275 si branching ratio
 	
 	cout<<"Efficienza "<<(peakcounts-bkg)/(activity_na*aqtime*0.904)<<endl; 
 	
@@ -139,21 +133,6 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	
 	h_spectrum->GetXaxis()->SetRangeUser(min, max);
 	
-	//GRAFICI CON ENERGIA CH0
-	
-	//calibrazione assi //CH0
-	//parametri calibrazione ch0 (valori da calibrazione con na e co, entrambi i detector a 13cm)
- 	//double m0=0.7494;
- 	//double q0=-3.7;
- 
- 
- 	//parametri calibrazione ch1 
- 	//double m1=0.706;
- 	//double q1=5.4;
- 	
- 	
-	//TAxis *axis=h_spectrum->GetXaxis();
-   	//axis->SetLimits(axis->GetXmin()*m0+q0,axis->GetXmax()*m0+q0); //CH0
 	
 	h_spectrum->Draw();
 	fermi_func->Draw("same");
