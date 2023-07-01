@@ -1,40 +1,24 @@
+
+
+//arctangent fit of the yield profile for the AN2000 accelerator calibration
+
+
 void grafico(const char *namefile) {
 
 TCanvas *c1= new TCanvas("c1");
 TGraphErrors *d= new TGraphErrors(namefile,"%lg %lg %lg %lg");
-//TGraphErrors *d2= new TGraphErrors(namefile2,"%lg %lg %lg %lg");
-
-
-//TF1  *f1= new TF1("f1", "[0]+x*[1]", 0.,12000);
 
 
 
-//d->GetXaxis()->SetTitle("d(cm)");
-//d->GetYaxis()->SetTitle("S/N");
-//d->GetXaxis()->CenterTitle();
-//d->GetYaxis()->CenterTitle();
-//d->SetTitle("Signal to noise ratio 511 keV ");
+
+
+
 
 d->SetMarkerStyle(6);
 d->SetMarkerSize(1);
 d->SetMarkerColor(1);
 d->SetLineColor(1);
-//d->SetLineColor(kRed);
 
-//d->Draw("AP");
-
-//d2->GetXaxis()->SetTitle("d(cm)");
-//d2->GetYaxis()->SetTitle("S/N");
-//d2->GetXaxis()->CenterTitle();
-//d2->GetYaxis()->CenterTitle();
-//d2->SetTitle("Signal to noise ratio 511 keV ");
-
-//d2->SetMarkerStyle(6);
-//d2->SetMarkerSize(1);
-//d2->SetMarkerColor(1);
-
-
-//d2->Draw("same");
 
 
 
@@ -50,18 +34,12 @@ mg->GetYaxis()->SetTitle("Yield");
 mg->Draw("AP");
 
 
-   //TLegend *legend = new TLegend();
-   //legend->SetHeader("Header","C"); 				// option "C" allows to center the header
-   //legend->AddEntry(d,"CH0");
-  // legend->AddEntry(d2,"CH1");
-   //gStyle->SetLegendFillColor(0);
-
-   //legend->Draw();
+   
 
 
-//fit con arcotangente
+//fit with arctangent function
 
-// x_bar 0.162937
+
 double sx= 0.1615;
 double dx= 0.1645;
 
@@ -73,7 +51,7 @@ double dx= 0.1645;
 
 //double d_par=0.00716067;  //par3
  
-//plot con  parametri del fit
+//plot with fit parameters
 
 double a_par=1.77180e-03; 
 
@@ -95,7 +73,7 @@ TF1* arctan_func = new TF1("arctan_func","[0]*TMath::ATan( [1]*(x+[2]) )  + [3]"
 //d->Fit(arctan_func,"R");
 arctan_func->Draw("same");
 
-// calcolo residui
+// residuals of the fit
 
 const int h=d->GetN();
 double resy[h];
