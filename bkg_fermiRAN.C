@@ -1,4 +1,4 @@
-//macro per sottrarre il backgound (funzione di Fermi)
+//macro to subtract the background with a Fermi function for two channels of the digitizer: ch0 and ch1 (varies also the extrema of the peak at random to see the effects of different ranges of integration)
 
 #include <iostream>
 #include <vector>
@@ -17,7 +17,7 @@ void bkg()
 {
 
 
-//vettori dei dati di input per ch0 e ch1
+//input data for channels  ch0 e ch1
 vector<const char*> dati_in0({"ch0_0.root","ch0_1.root","ch0_2.root","ch0_3.root","ch0_4.root","ch0_5.root"});
 vector<const char*>    dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.root","ch1_4.root","ch1_5.root"});
 
@@ -29,7 +29,7 @@ vector<const char*>    dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.r
 
   
   
-//picco a 1275 keV con ch0 
+//peak at 1275 keV with ch0 
 
 
 for(int a=0; a<dati_in0.size();a++)
@@ -80,14 +80,14 @@ for(int u=0;u<100;u++)
 	//	inbranch_time->GetEntry(i);	
 	}	
 	
-	//itervalli a sx e dx del picco in cui vado a vedere il bkg
+	//itervals  sx and dx of the peak to which subtract the background 
 	int sx_min=sxch0[a]-50.; //ch0
 	int sx_max=sxch0[a];
 	
 	int dx_min=dxch0[a]; //ch0
 	int dx_max=dxch0[a]+50;
 	
-	//fit guassiano del picco, tra sx_max e dx_min	
+	//gaussian fit between sx_max and dx_min	
 	TF1 *g   = new TF1("g1","gaus",sx_max,dx_min);
 	h_spectrum->Fit(g,"R");
 	
@@ -100,7 +100,7 @@ for(int u=0;u<100;u++)
 	double mean_sx=0;
 
 
-//primo for per la parte a sinistra del picco	
+//left part of the peak
 	for(int i=sx_min; i<sx_max;i++){
 	sx+=h_spectrum->GetBinContent(i);
 	mean_sx= sx/(sx_max-sx_min);
@@ -110,7 +110,7 @@ for(int u=0;u<100;u++)
 	double mean_dx=0;
 
 	
-//primo for per la parte a destra del picco	
+//right part of the peak
 	for(int i=dx_min; i<dx_max;i++){
 	dx+=h_spectrum->GetBinContent(i);
 	mean_dx= dx/(dx_max-dx_min);
@@ -127,20 +127,14 @@ for(int u=0;u<100;u++)
 	double peakcounts = h_spectrum->Integral(sx_max,dx_min);
 	
 	
-	//attività del Co oggi bq
-	double activity_co = 93.56*1.e3;
-	//attività del Na oggi bq 
+	
+	//activity Na today bq 
 	double activity_na = 23447.;
 	
 	int n=intree->GetEntries();
        intree->GetEntry(n-1);
         double t0=indata2.timetag;
 	double aqtime=t0*1e-12;
-
-	
-
-	//Alternativa per calcolare i conteggi di background
-	//cout <<"Background counts  " << retta->Integral(sx_max,dx_min) << endl;	
 
 
          randomint->Fill(peakcounts-bkg);
@@ -152,7 +146,7 @@ for(int u=0;u<100;u++)
 	
 	
 	
-	} //fine for u
+	} //end for u
 	
 	randomint->SetTitle(Form("Time spectrum 1275 keV Na_%d",a));
  	randomint->GetXaxis()->SetTitle("Net counts under the peak");
@@ -160,7 +154,7 @@ for(int u=0;u<100;u++)
 	randomint->Draw();
 	tc->SaveAs(Form("Integral_spectrumch0%d",a)); //ch0
 	
-	}//fine for a	
+	}//end for a	
 	
 	
 	
