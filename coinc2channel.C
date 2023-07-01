@@ -35,18 +35,20 @@ struct slimport_data_t {
 	ULong64_t         Timestamp;
 };
 
+
+//macro to get two gamma rays detected in coincidence by two NaI(Tl) (in a specific time window) for the same  energy peak  
 //acq_ch0   : timetag/l:baseline/i:qshort/s:qlong/s:pur/s: l=ulong i=uint s=ushort
 
 void readchannel()
 {
 
-//Le sigma dei 511 sono quelle trovate nel file centroidi
 
-//vettori dei dati di input per ch0 e ch1
+
+//data input for ch0 e ch1 for different source to detector distances
   vector<const char*> dati_in0({"ch0_0.root","ch0_1.root","ch0_2.root","ch0_3.root","ch0_4.root","ch0_5.root"});
   vector<const char*> dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.root","ch1_4.root","ch1_5.root"});
   
-//vettori dei dati di output istogrammi picchi 511 per ch0 e ch1, istogrammi delle coincidenze tra i due canali, istogramma delta tempi  
+//data output coincidences and timestamps 511 keV  for different source to detector distances
   vector<const char*> coinc_ch0({"coinc_ch0_0.root","coinc_ch0_1.root","coinc_ch0_2.root","coinc_ch0_3.root","coinc_ch0_4.root","coinc_ch0_5.root"});
   vector<const char*> coinc_ch1({"coinc_ch1_0.root","coinc_ch1_1.root","coinc_ch1_2.root","coinc_ch1_3.root","coinc_ch1_4.root","coinc_ch1_5.root"});
   
@@ -56,7 +58,7 @@ void readchannel()
   
   
   
-//vettore delle mean e delle sigma dei centroidi del picco a 511 del ch0 + vettori delle soglie in energia  
+//mean, standard deviation and thresholds for the 511 keV peak  
   vector<double> mean_0={510.63,510.7,510.4,510.2,510.4,510.1};
   vector<double> tresigma_0={3*11.36,3*11.6,3*11.9,3*12.0,3*13.2,3*14.1};
   
@@ -69,7 +71,7 @@ void readchannel()
    sogliapicco20.push_back(mean_0[i] + tresigma_0[i]);
    }
 
-//vettore delle mean e delle sigma dei centroidi del picco a 511 del ch0 + vettori delle soglie in energia  
+// mean and standard deviations for the peak centroids of the 511 keV peak and energy thresholds  
   vector<double> mean_1={510.96,510.3,510.1,510.0,509.0,509.2};
   vector<double> tresigma_1={3*11.08,3*11.9,3*11.9,3*12.4,3*12.7,3*12.9};
   
@@ -115,12 +117,12 @@ void readchannel()
  
  
 
-  	//parametri calibrazione ch0 (valori da calibrazione con na e co, entrambi i detector a 13cm)
+  	//calibration parameters for sources of Na and Co, 13cm source to detector distance
  	double m0=0.7494;
  	double q0=-3.7;
  
  
- 	//parametri calibrazione ch1 
+ 	//ch1 calibration parameters 
  	double m1=0.706;
  	double q1=5.4;
 
@@ -183,9 +185,9 @@ void readchannel()
       
      			if((indata1.Energy*m0+q0)>sogliapicco10[a] && (indata1.Energy*m0+q0)<sogliapicco20[a])
      			{
-      			 piccoenergy0.push_back(indata1.Energy);  //in canali
+      			 piccoenergy0.push_back(indata1.Energy);  //in channels
        		 time0.push_back(indata2.Timestamp);
-       		 h_spectrum0->Fill(indata1.Energy);  //in canali
+       		 h_spectrum0->Fill(indata1.Energy);  //in channels
                        }
                 }
 
@@ -212,9 +214,9 @@ void readchannel()
      			
      			if((indata3.Energy*m1+q1)>sogliapicco11[a] && (indata3.Energy*m1+q1)<sogliapicco21[a])
      			{
-       		piccoenergy1.push_back(indata3.Energy);   //in canali
+       		piccoenergy1.push_back(indata3.Energy);   //in channels
        		time1.push_back(indata4.Timestamp);
-       		h_spectrum1->Fill(indata3.Energy);   //in canali
+       		h_spectrum1->Fill(indata3.Energy);   //in channels
        		
      
     		       }
@@ -239,7 +241,7 @@ void readchannel()
                 
                 
                 
-               // coincidenze
+               // coincidences
                int start1=0;
                
                 for(int i=0;i<piccoenergy0.size();i++)
@@ -250,8 +252,8 @@ void readchannel()
        
           	 	   if( abs(time0[i]-time1[j])<tsoglia /*&& abs(piccoenergy0[i]+piccoenergy1[j]-1022.)<5. */)
                 	    {  
-             	 	     coinc_spectrum->Fill(piccoenergy0[i]);   //in canali
-             	 	     matrixcoinc->Fill(piccoenergy0[i],piccoenergy1[j]);   //in canali
+             	 	     coinc_spectrum->Fill(piccoenergy0[i]);   //in channels
+             	 	     matrixcoinc->Fill(piccoenergy0[i],piccoenergy1[j]);   //in channels
              	 	     start1=j;
              	 	     break;
              	 	    }
@@ -264,7 +266,7 @@ void readchannel()
                  int start2=0;
                 
                 
-                // istogramma tempi
+                // time histogram
    		for(int i=0;i<piccoenergy0.size();i++)
    		{
      			for(int j=start2;j<piccoenergy1.size();j++)
