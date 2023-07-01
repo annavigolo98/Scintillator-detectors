@@ -1,4 +1,4 @@
-//macro per sottrarre il backgound (metodo trapezio)
+//macro to subtract the background for ch0 and ch1 of the digitizer (trapezoid method)
 
 
 struct slimport_data_t {
@@ -11,7 +11,7 @@ void bkg()
 {
 
 
-//vettori dei dati di input per ch0 e ch1
+//vectors of  input for ch0 and ch1
 vector<const char*> dati_in0({"ch0_0.root","ch0_1.root","ch0_2.root","ch0_3.root","ch0_4.root","ch0_5.root"});
 vector<const char*>    dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.root","ch1_4.root","ch1_5.root"});
 
@@ -55,14 +55,14 @@ vector <double> dxch1({1860.,1860.,1860.,1860.,1850.,1860.});
 	//	inbranch_time->GetEntry(i);	
 	}	
 	
-	//itervalli a sx e dx del picco in cui vado a vedere il bkg
+	//itervals at left and right of the peak 
 	int sx_min=sxch0[a]-50.; //ch0
 	int sx_max=sxch0[a];
 	
 	int dx_min=dxch0[a]; //ch0
 	int dx_max=dxch0[a]+50;
 	
-	//fit guassiano del picco, tra sx_max e dx_min	
+	//gaussian fit of the peak from sx_max to dx_min	
 	TF1 *g   = new TF1("g1","gaus",sx_max,dx_min);
 	h_spectrum->Fit(g,"R");
 	
@@ -71,7 +71,7 @@ vector <double> dxch1({1860.,1860.,1860.,1860.,1850.,1860.});
 	double mean_sx=0;
 
 
-//primo for per la parte a sinistra del picco	
+//left of the peak
 	for(int i=sx_min; i<sx_max;i++){
 	sx+=h_spectrum->GetBinContent(i);
 	mean_sx= sx/(sx_max-sx_min);
@@ -81,7 +81,7 @@ vector <double> dxch1({1860.,1860.,1860.,1860.,1850.,1860.});
 	double mean_dx=0;
 
 	
-//primo for per la parte a destra del picco	
+//right of the peak 
 	for(int i=dx_min; i<dx_max;i++){
 	dx+=h_spectrum->GetBinContent(i);
 	mean_dx= dx/(dx_max-dx_min);
@@ -99,10 +99,9 @@ vector <double> dxch1({1860.,1860.,1860.,1860.,1850.,1860.});
 	double peakcounts = h_spectrum->Integral(sx_max,dx_min);
 	
 	
-	//attività del Co oggi
-	double activity_co = 93.56*1.e3;  //bq
 	
-	//attività del Na oggi bq 
+	
+	//Na activity today bq 
 	double activity_na = 23447.;  //bq
 	
 	int n=intree->GetEntries();
@@ -116,14 +115,12 @@ vector <double> dxch1({1860.,1860.,1860.,1860.,1850.,1860.});
 	cout<<"Peak counts  "<<peakcounts << "  +/-  " << sqrt(peakcounts) << endl;
 	cout<<"Background counts  "<<bkg << "  +/-  " << sqrt(bkg) << endl;   
 
-	//Alternativa per calcolare i conteggi di background
-	//cout <<"Background counts  " << retta->Integral(sx_max,dx_min) << endl;	
-
+	
 
 
 	cout<<"Net counts  " << (peakcounts-bkg) <<"  +/-  " << sqrt(peakcounts+bkg)<<endl;
 	
-	//efficienza per il sodio
+	//efficiency for Na 
 	cout<<"Efficienza "<<(peakcounts-bkg)/(activity_na*0.904*aqtime)<<endl;
 	
 	//tc->cd(a+1);
