@@ -113,7 +113,7 @@ double w=t_last_spectrum/t_last_bkg;
 
 
 
-// istogramma background
+//  background histogram
 
 
 
