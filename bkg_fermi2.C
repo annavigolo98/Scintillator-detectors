@@ -24,7 +24,7 @@ vector <double> sxch1({2460.,2460.,2460.,2460.,2460.,2460.});  //ch1
 vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
   
   TCanvas* tc= new TCanvas("tc","histo",2400,800);
-  //tc->Divide(3,2); 
+   
   
     for(int a=0; a<dati_in0.size();a++)
     {
@@ -100,8 +100,7 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	double peakcounts = h_spectrum->Integral(sx_max,dx_min);
 	
 	
-	//Co activity today bq
-	double activity_co = 93.56*1.e3;
+	
 	//activity Na today bq 
 	double activity_na = 23447.;
 	
@@ -127,7 +126,7 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	cout<<"Efficienza "<<(peakcounts-bkg)/(activity_na*aqtime*0.904)<<endl; 
 	
 	
-	//tc->cd(a+1);
+	
 	double min=2300; //ch1
 	double max=2700;
 	
@@ -137,13 +136,6 @@ vector <double> dxch1({2590.,2590.,2590.,2590.,2590.,2590.});
 	h_spectrum->Draw();
 	fermi_func->Draw("same");
 	
-	//TF1* fermi_func2 = new TF1("step_sxcal","([0]/(1+e^(x-[1])))+[2]",sx_max*m0+q0,dx_min*m0+q0);
-	//fermi_func2-> SetParameter(0,(mean_sx-mean_dx));
-	//fermi_func2-> SetParameter(1,mean_gauss);
-	//fermi_func2-> SetParameter(2,mean_dx);
-	//fermi_func2->Draw("same");
-	
-	//tc->SaveAs( Form("Gauss1275fermich0%d.pdf",a)   ); //ch0
 	
 	}
 	
