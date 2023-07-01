@@ -45,7 +45,7 @@ for(int a=0; a<dati_in1.size();a++)
   slimport_data_t indata2;
   
    
- TFile *infile1 = new TFile(dati_in1[a]); //canale 1 LaBr det
+ TFile *infile1 = new TFile(dati_in1[a]); //channel 1 LaBr det
  TTree *intree1 = (TTree*)infile1->Get(Form("Data"));
  TBranch *energybranch1 = intree1->GetBranch(Form("Energy"));
  TBranch *timebranch1= intree1->GetBranch(Form("Timestamp"));
@@ -57,7 +57,7 @@ for(int a=0; a<dati_in1.size();a++)
  int n1=intree1->GetEntries();
  
  
- TFile *infile2 = new TFile("CH1_Runbkg.root");  //Run background CH1 del 24/11/22
+ TFile *infile2 = new TFile("CH1_Runbkg.root");  //Run background CH1 of 24/11/22
  TTree *intree2 = (TTree*)infile2->Get(Form("Data"));
  TBranch *energybranch2 = intree2->GetBranch(Form("Energy"));
  TBranch *timebranch2= intree2->GetBranch(Form("Timestamp"));
