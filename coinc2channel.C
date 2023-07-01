@@ -36,7 +36,7 @@ struct slimport_data_t {
 };
 
 
-//macro to get two gamma rays detected in coincidence by two NaI(Tl) (in a specific time window) for the same  energy peak  
+//macro to get two gamma rays detected in coincidence by two NaI(Tl) detectors (in a specific time window) for the same  energy peak  
 //acq_ch0   : timetag/l:baseline/i:qshort/s:qlong/s:pur/s: l=ulong i=uint s=ushort
 
 void readchannel()
