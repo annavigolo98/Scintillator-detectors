@@ -9,7 +9,7 @@ struct slimport_data_t {
 	ULong64_t       Timestamp;
 };
 
-
+//subtracts the background histogram 
 //acq_ch0   : timetag/l:baseline/i:qshort/s:qlong/s:pur/s: l=ulong i=uint s=ushort
 
 
@@ -17,11 +17,11 @@ void readchannel()
 {
 
  
- //vettori dei dati di input per ch0 e ch1
+ //data input for ch0 and ch1
   
   vector<const char*> dati_in1({"CH1_Run72.root","CH1_Run73.root","CH1_Run74.root","CH1_Run75.root","CH1_Run76.root","CH1_Run77.root"});
   
-  //soglie per integrale
+  //integral thresholds
   
   
   
@@ -70,7 +70,7 @@ for(int a=0; a<dati_in1.size();a++)
  
  
  
- //istogramma energia 
+ //energy histogram 
  
  TH1D *h_spectrum= new TH1D("h_spectrum","decayspectrum",16383, -0.5, 16382.5);
  //TH1D *h_spectrum= new TH1D("h_spectrum","decayspectrum",100,6500 ,7500 );
@@ -88,12 +88,12 @@ h_spectrum->SetLineColor(2);
 
  
 
- //ultimo timestamp di segnale e bkg per pesi sullo spettro del background
+ //last timestamp of signal and background for weights of the  background spectrum 
  
  
 
 
-//ultimotimestamp spectrum
+//last timestamp spectrum
 timebranch1->GetEntry(n1-1);
 double t_last_spectrum=indata1.Timestamp;  //in secondi
 //cout<<"Last timestamp spectrum "<<endl;
@@ -138,14 +138,11 @@ h_spectrum_bkg->SetLineColor(2);
 h_spectrum_bkg->SetLineColor(3);
 
 
-//normalizzo gli isto alla loro area
-//h_spectrum->Scale(1./h_spectrum->Integral());
-//h_spectrum_bkg->Scale(1./h_spectrum_bkg->Integral());
 
 
 
 
-// sottrazione del background e plot spettri
+//  background subtraction end plote 
 
 
 tc->cd(a+1);
@@ -159,7 +156,7 @@ h_spectrum_bkg->Draw("same");
 
 
 
-//sottraggo il bkg
+//bkg subtraction
 TH1*hfin = (TH1*)(h_spectrum->Clone("h_fin"));
 hfin->Add(h_spectrum_bkg, -1.0);
 
@@ -175,7 +172,7 @@ hfin->SetLineColor(4);
 
 hfin->Draw("same"); 
 
-//soglie per l'integrale
+//integral thresholds for the net area calculation
 
 double x_in= hfin->GetXaxis()->FindBin(sogliesx_ch1[a]);
 double x_fin= hfin->GetXaxis()->FindBin(sogliedx_ch1[a]);
