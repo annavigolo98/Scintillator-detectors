@@ -134,11 +134,11 @@ void readchannel()
         
         
         
- 	double esoglia=10.0; //keV
- 	double tsoglia=3.*1e4; //ch
+ 	double esoglia=10.0; //keV threshold in energy for coincidences
+ 	double tsoglia=3.*1e4; //time threshold for coincidences
  
   
- 	double sogliadeltat=2.*1e6;; //soglia deltat coincidenze spettri
+ 	double sogliadeltat=2.*1e6; \\time threshold to make the time histogram
  
  	TH1D *h_spectrum0= new TH1D("h_spectrum0","decayspectrum",16383,-0.5, 16382.5);
 	TH1D *h_spectrum1= new TH1D("h_spectrum1","decayspectrum",16383,-0.5, 16382.5);
