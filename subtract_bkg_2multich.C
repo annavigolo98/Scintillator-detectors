@@ -142,7 +142,7 @@ h_spectrum_bkg->SetLineColor(3);
 
 
 
-//  background subtraction end plote 
+//  background subtraction and plot 
 
 
 tc->cd(a+1);
