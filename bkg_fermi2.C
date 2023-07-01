@@ -16,7 +16,7 @@ vector<const char*> dati_in0({"ch0_0.root","ch0_1.root","ch0_2.root","ch0_3.root
 vector<const char*>    dati_in1({"ch1_0.root","ch1_1.root","ch1_2.root","ch1_3.root","ch1_4.root","ch1_5.root"});
 
 
-// values in channels for the peaks at 1275+511 keV of lantanium detector 
+// values in channels for the peaks at 1275+511 keV of the  detector 
 vector <double> sxch0({2320.,2300.,2300.,2300.,2300.,2300.}); //ch0
 vector <double> dxch0({2450.,2450.,2450.,2400.,2400.,2400.});
 
