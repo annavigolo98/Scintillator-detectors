@@ -1,4 +1,4 @@
-# scintillators
+# Detector coincidence system with scintillators and calibration of the AN2000 accelerator
 Programs used for the study of the efficiency of two LaBr_3(Cs) and CeBr_3 detectors through coincidence events (reconstructed by a program).
 The pdf is in the 'advanced_lab' file.
 
